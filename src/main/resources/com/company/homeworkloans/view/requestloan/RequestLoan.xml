@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Request a loan">
+    <data>
+        <collection id="clientsDc" class="com.company.homeworkloans.entity.Client">
+            <fetchPlan extends="_base"/>
+            <loader id="clientsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Client e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="requestAction"/>
+        <action id="cancelAction" type="view_close"/>
+    </actions>
+    <layout>
+        <vbox id="requestVBox" minWidth="30em" minHeight="10em">
+            <entityComboBox id="clientsComboBox" metaClass="Client" width="100%" required="true">
+                <itemsQuery class="com.company.homeworkloans.entity.Client" escapeValueForLike="true"
+                            searchStringFormat="(?i)%${inputString}%">
+                    <fetchPlan extends="_base"/>
+                    <query>
+                        <![CDATA[select e from Client e where e.firstName like :searchString escape '\' order by e.firstName]]>
+                    </query>
+                </itemsQuery>
+                <actions>
+                    <action id="entityClear" type="entity_clear"/>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityOpen" type="entity_open"/>
+                </actions>
+            </entityComboBox>
+            <bigDecimalField id="amount" width="100%" required="true"/>
+        </vbox>
+        <hbox id="buttonPanel">
+            <button id="requestBtn" text="Request" icon="vaadin:file-text-o" action="requestAction"/>
+            <button id="cancelBtn" action="cancelAction"/>
+        </hbox>
+    </layout>
+</view>

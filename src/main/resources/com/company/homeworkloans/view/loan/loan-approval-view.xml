@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="Loan Approval"
+      focusComponent="loansDataGrid">
+    <data>
+        <collection id="loansDc"
+                    class="com.company.homeworkloans.entity.Loan">
+            <fetchPlan extends="_base">
+                <property fetchPlan="_base" name="client"/>
+            </fetchPlan>
+            <loader id="loansDl" readOnly="true">
+                 <query>
+                     <![CDATA[select e from Loan e where e.status =:status]]>
+                </query>!
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select" text="Approve"/>
+        <action id="discardAction" type="lookup_discard" text="Reject"/>
+    </actions>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" spacing="true">
+            <button id="approveBtn" action="loansDataGrid.approve" text="Approve" icon="vaadin:thumbs-up-o"/>
+            <button id="rejectBtn" action="loansDataGrid.reject" text="Reject" icon="vaadin:thumbs-down-o"/>
+            <simplePagination id="pagination" dataLoader="loansDl"/>
+        </hbox>
+
+        <dataGrid id="loansDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="loansDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="approve" text="Approve"/>
+                <action id="reject" text="Reject"/>
+            </actions>
+            <columns resizable="true">
+                <column property="client"/>
+                <column property="amount"/>
+                <column property="requestDate"/>
+                <column property="status" visible="false"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>
